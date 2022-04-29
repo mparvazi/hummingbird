@@ -39,6 +39,12 @@ const initSliders = () => {
     const sliderDirection = container.dataset.sliderDirection === '1' ? 'rtl' : 'ltr';
     const min = parseInt(<string>container.dataset.sliderMin, 10);
     const max = parseInt(<string>container.dataset.sliderMax, 10);
+
+
+    const sliderId = container.dataset.sliderId;
+    var inputStart = document.querySelector<HTMLInputElement>(`#slider-range_${sliderId}-start`);
+    var inputEnd = document.querySelector<HTMLInputElement>(`#slider-range_${sliderId}-end`);
+
     // let format;
     let initiatedSlider: API;
 
@@ -82,6 +88,24 @@ const initSliders = () => {
       initiatedSlider.on('set', (values, handle, unencoded, tap, positions, instance) => {
         filterHandler(values, instance);
       });
+
+      inputStart?.addEventListener('change',  (e) => {
+        initiatedSlider.set([String(inputStart?.value), String(inputEnd?.value)]);
+      });
+  
+      inputEnd?.addEventListener('change',  (e) => {
+        initiatedSlider.set([String(inputStart?.value), String(inputEnd?.value)]);
+      });
+
+      initiatedSlider.on('update', (values, handle) => {
+        if (handle === 0 && inputStart?.isConnected) {
+          inputStart.value = String(values[handle]);
+        }
+        if (handle === 1 && inputEnd?.isConnected) {
+          inputEnd.value = String(values[handle]);
+        }
+      });
+
     } else {
       container.noUiSlider.updateOptions({
         start: sliderValues ?? [min, max],

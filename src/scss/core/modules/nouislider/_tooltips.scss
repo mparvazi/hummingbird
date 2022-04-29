@@ -1,9 +1,9 @@
-$component-name: noui;
+$component-name: noUi;
 
 .#{$component-name} {
   &-tooltip {
     position: absolute;
-    display: block;
+    display: none;
     padding: $nouislider-tooltips-padding;
     font-size: $nouislider-tooltips-font-size;
     font-weight: $nouislider-tooltips-font-weight;
@@ -13,6 +13,10 @@ $component-name: noui;
     background: $nouislider-tooltips-background-color;
     border: $nouislider-tooltips-border-width solid $nouislider-tooltips-border-color;
     border-radius: $nouislider-tooltips-border-radius;
+  }
+
+  &-active .#{$component-name}-tooltip {
+    display: block;
   }
 
   &-horizontal .#{$component-name}-tooltip {

@@ -177,19 +177,31 @@
                       data-slider-specifications="{$facet.properties.specifications|@json_encode}"
                       data-slider-encoded-url="{$filter.nextEncodedFacetsURL}"
                       data-slider-direction="{$language.is_rtl}"
-                   >
+                    >
                     </div>
-                  <input 
-                    type="hidden"
-                    class="form-range-start js-faceted-slider js-faceted-slider-start"
-                    id="slider-range_{$_expand_id}-start"
-                   >
-                  <input 
-                    type="hidden"
-                    class="form-range-start js-faceted-slider js-faceted-slider-end"
-                    id="slider-range_{$_expand_id}-end"
-                   >
-                 </div>
+                    {$sign_position = $facet.properties.specifications.positivePattern|strpos:"¤"}
+                    {function unit}
+                      {if $sign_position === 0}
+                        <span class="input-group-text">{$facet.properties.unit}</span>
+                        <input class="form-control form-range-{$direction} js-faceted-slider js-faceted-slider-{$direction}" id="slider-range_{$_expand_id}-{$direction}" value="{$facet.properties.max}">
+                      {else}
+                        <input class="form-control form-range-{$direction} js-faceted-slider js-faceted-slider-{$direction}" id="slider-range_{$_expand_id}-{$direction}" value="{$facet.properties.max}">
+                        <span class="input-group-text">{$facet.properties.unit}</span>
+                      {/if}
+                    {/function}
+                    <div class="d-flex align-items-center mt-4">
+                      <span class="w-25"><small>Min:</small></span>
+                      <div class="input-group input-group-sm w-75">
+                        {unit direction="start"}
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-2">
+                      <span class="w-25"><small>Max:</small></span>
+                      <div class="input-group input-group-sm w-75">
+                        {unit direction="end"}
+                      </div>
+                    </div>
+                  </div>
                 {/foreach}
               {/block}
             {/if}
