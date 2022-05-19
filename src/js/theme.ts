@@ -21,6 +21,7 @@ import useQuantityInput from './components/useQuantityInput';
 import './modules/blockcart';
 import './modules/facetedsearch';
 import initDesktopMenu from './modules/ps_mainmenu';
+import initProductCustomization from './product-customization';
 
 initEmitter();
 
@@ -41,6 +42,7 @@ $(() => {
   initMobileMenu();
   initVisiblePassword();
   initDesktopMenu();
+  initProductCustomization();
 
   prestashop.on('responsiveUpdate', () => {
     initSearchbar();
@@ -50,6 +52,16 @@ $(() => {
   });
 
   prestashop.on('updatedCart', () => useQuantityInput());
+
+  prestashop.on('handleError', (data: any) => {
+    const {resp} = data;
+    const errors = resp.errors as Array<string>;
+    if (errors) {
+      errors.forEach((error: string) => {
+        useToast(error, {type:'danger', autohide: false}).show();
+      });
+    }
+  });
 });
 
 export const components = {

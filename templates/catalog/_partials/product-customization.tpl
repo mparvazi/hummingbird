@@ -2,14 +2,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *}
- 
-<section class="product-customization js-product-customization">
+
+<section class="product-customization js-product-customization position-relative">
+  <div class="product-customization__overlay position-absolute w-100 h-100 bg-dark opacity-25 visually-hidden"></div>
+  <div class="product-customization__spinner spinner-border position-absolute top-50 start-50 visually-hidden" role="status"></div>
   {if !$configuration.is_catalog}
     <div class="card bg-light border-1 mb-4">
       <div class="card-body px-2 px-sm-3">
         <h5 class="card-title mb-3">{l s='Product customization' d='Shop.Theme.Catalog'}</h5>
         {block name='product_customization_form'}
-          <form method="post" action="{$product.url}" enctype="multipart/form-data" class="mb-0">
+          <form method="post" action="{$product.url}" enctype="multipart/form-data" class="needs-validation" novalidate>
             {foreach from=$customizations.fields item="field"}
               <div class="product-customization__item card border-1 mb-2 mb-sm-3">
                 <div class="card-header bg-transparent fw-bold border-1">{$field.label}</div>
@@ -32,7 +34,7 @@
                       {if $field.is_customized}
                         <div class="mt-3">
                           <div class="d-flex align-items-end">
-                            <img src="{$field.image.small.url}" class="img-fluid rounded-3" loading="lazy">
+                            <img src="{$field.image.small.url}" class="img-fluid rounded-3" width="64" height="64">
                             <a class="d-block ms-2" href="{$field.remove_image_url}" rel="nofollow">{l s='Remove Image' d='Shop.Theme.Actions'}</a>
                           </div>
                         </div>
@@ -65,3 +67,4 @@
     </div>
   {/if}
 </section>
+
