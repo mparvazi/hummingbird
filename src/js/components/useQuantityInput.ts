@@ -32,11 +32,11 @@ const useQuantityInput = (selector = quantityInputMap.default, delay = Quantity.
 
         qtyInput.addEventListener('keydown', (event: KeyboardEvent) => {
           if (event.key === ARROW_UP_KEY) {
-            changeQuantity(qtyInput, 1);
+            changeQuantity(qtyInput, 1, true);
           }
 
           if (event.key === ARROW_DOWN_KEY) {
-            changeQuantity(qtyInput, -1);
+            changeQuantity(qtyInput, -1, true);
           }
         });
 
@@ -51,8 +51,14 @@ const useQuantityInput = (selector = quantityInputMap.default, delay = Quantity.
 
           // If the input element has update URL (e.g. Cart)
           // then convert the buttons when user changed the value manually
-          qtyInput.addEventListener('keydown', (event: KeyboardEvent) => {
-            showConfirmationButtons(qtyInputGroup);
+          qtyInput.addEventListener('keyup', (event: KeyboardEvent) => {
+            const baseValue = qtyInput.getAttribute('value');
+
+            if (qtyInput.value !== baseValue) {
+              showConfirmationButtons(qtyInputGroup);
+            } else {
+              showSpinButtons(qtyInputGroup);
+            }
 
             if (event.key === ENTER_KEY) {
               updateQuantity(qtyInputGroup, 1);
@@ -68,16 +74,20 @@ const useQuantityInput = (selector = quantityInputMap.default, delay = Quantity.
   });
 };
 
-const changeQuantity = (qtyInput: HTMLInputElement, change: number) => {
-  const currentValue = Number(qtyInput.value);
-  const baseValue = qtyInput.getAttribute('value');
-  const min = (qtyInput.dataset.updateUrl === undefined) ? Number(qtyInput.getAttribute('min')) : 0;
+const changeQuantity = (qtyInput: HTMLInputElement, change: number, keyboard = false) => {
+  const {mode} = qtyInput.dataset;
 
-  if (Number.isNaN(currentValue) === false) {
-    const newValue = Math.max(currentValue + change, min);
-    qtyInput.value = String(newValue);
-  } else {
-    qtyInput.value = baseValue ?? String(min);
+  if (mode !== 'confirmation' || keyboard) {
+    const currentValue = Number(qtyInput.value);
+    const baseValue = qtyInput.getAttribute('value');
+    const min = (qtyInput.dataset.updateUrl === undefined) ? Number(qtyInput.getAttribute('min')) : 0;
+
+    if (Number.isNaN(currentValue) === false) {
+      const newValue = Math.max(currentValue + change, min);
+      qtyInput.value = String(newValue);
+    } else {
+      qtyInput.value = baseValue ?? String(min);
+    }
   }
 };
 
